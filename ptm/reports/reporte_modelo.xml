@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="paperformat_modelo3" model="report.paperformat">
+        <field name="name">Modelo 3</field>
+        <field name="default" eval="True"/>
+        <field name="format">Letter</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">23</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <report id="modelo3_report" string="Modelo 3"
+        model="reporte.wizard"
+        report_type="qweb-html"
+        name="ptm.plan_mensual_view"
+        paperformat="paperformat_modelo3"
+        menu="False"/>
+
+        <template id="plan_mensual_view">
+            <t t-call="web.html_container">
+                <div class="header">
+                    <h5 style="font-weight: bold;">
+                        APROBADO: <t t-esc="manager"/><br/>
+                        Nombre (s) y apellidos del que aprueba.
+                    </h5>
+                </div>
+               <div class="article mt0 o_report_layout_standard" >
+                        <h5 style="font-weight: bold;">
+                         PLAN DE TRABAJO PARA EL MES DE: <t t-esc="month"/><br/>
+                         TAREAS PRINCIPALES:
+                        </h5>
+                            <t t-if="len(principal_events)">
+                                <ul>
+                                    <t t-foreach="principal_events" t-as="principal">
+                                        <t t-set="task" t-value="principal['name']+'/ '+principal['frequency']+'/ '+principal['hour']+'/ '+principal['location']"/>
+                                        <li style="font-weight: bold;">
+                                            <t t-esc="task"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </t>
+
+                   <table class="table table-bordered" style="table-layout: fixed;" >
+                      <tbody>
+                          <t t-foreach="docs" t-as="doc">
+                                  <tr>
+                                      <t t-foreach="doc" t-as="d">
+                                          <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding: 0cm 0cm 0.1cm 0.1cm; font-weight: bold;word-wrap: break-word;" width="14%">
+                                              <t t-if="d">
+                                              <t t-set="day" t-value="d[0]['day_week']+' '+d[0]['day']"/>
+                                               <span><t t-esc="day"/></span>
+                                              </t>
+                                              <t t-else="">
+                                              <span> </span>
+                                              </t>
+                                          </td>
+                                      </t>
+                                  </tr>
+                                  <tr>
+                                      <t t-foreach="doc" t-as="d">
+                                          <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding: 0cm 0cm 0.1cm 0.1cm; word-wrap: break-word;" width="14%">
+                                              <t t-if="d">
+
+                                                      <t t-foreach="d" t-as="a">
+                                                          <t t-if="'name' in a">
+                                                          <t t-set="event" t-value="'-'+a['hour']+' '+a['name']"/>
+                                                            <p><span><t t-esc="event"/></span></p>
+                                                          </t>
+                                                          <t t-else="">
+                                                              <p><span> </span></p>
+                                                          </t>
+                                                       </t>
+                                              </t>
+                                          </td>
+                                      </t>
+                                  </tr>
+                          </t>
+                      </tbody>
+                   </table>
+                </div>
+            </t>
+        </template>
+
+        <report id="resumen_report" string="Resumen"
+        model="reporte.wizard"
+        report_type="qweb-html"
+        name="ptm.resumen_plan_mensual_view"
+        paperformat="paperformat_modelo3"
+        menu="False"/>
+
+        <template id="resumen_plan_mensual_view" >
+            <t t-call="web.html_container">
+                
+                <div class="header" style="solid black;">
+                    <t t-set="month_year" t-value="month+'/'+year"/>
+                    <h3 class="text-center">
+                     RESUMEN DEL PLAN DE TRABAJO DEL MES DE  <t t-esc="month_year"/>
+                    </h3>
+                </div>
+                <div class="article mt0 o_report_layout_standard">
+                    <table width="896" cellspacing="0" cellpadding="5">
+                        <tbody>
+                        <tr>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" rowspan="2" width="125" height="15">
+                        <p style="margin-left: 0.96cm; text-indent: -0.96cm; margin-bottom: 0cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>TOTAL, DE TAREAS</strong></span></span></span></p>
+                        <p style="margin-left: 0.96cm; text-indent: -0.96cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>PLANIFICADAS</strong></span></span></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="3" width="455">
+                        <p style="margin-left: 0.96cm; text-indent: -0.96cm;" align="center"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>DE ELLAS</strong></span></span></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="2" rowspan="2" width="280">
+                        <p style="margin-left: 0.96cm; text-indent: -0.96cm; margin-bottom: 0cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>NUEVAS TAREAS</strong></span></span></span></p>
+                        <p style="margin-left: 0.96cm; text-indent: -0.96cm; margin-bottom: 0cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>(EXTRA PLANES) </strong></span></span></span></p>
+                        <p lang="es-ES-u-co-trad" style="margin-left: 0.96cm; text-indent: -0.96cm; margin-bottom: 0cm;"></p>
+                        <p style="margin-left: 0.96cm; text-indent: -0.96cm;"></p>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="104">
+                        <p style="margin-left: 0.96cm; text-indent: -0.96cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>CUMPLIDAS</strong></span></span></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="146">
+                        <p style="margin-left: 0.96cm; text-indent: -0.96cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>INCUMPLIDAS</strong></span></span></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="184">
+                        <p style="margin-left: 0.96cm; text-indent: -0.96cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>MODIFICADAS</strong></span></span></span></p>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="125" height="13">
+                        <p style="margin-top: 0.17cm;" align="center"><t t-esc="cant_planificadas"/></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="104">
+                        <p style="margin-top: 0.17cm;" align="center"><t t-esc="cant_cumplidos"/></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="146">
+                        <p style="margin-top: 0.24cm;" align="center"><span style="font-family: Arial, serif;"><t t-esc="cant_incumplidas"/></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="184">
+                        <p style="margin-top: 0.24cm;" align="center"><span style="font-family: Arial, serif;"><t t-esc="cant_modificadas"/></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="2" width="280">
+                        <p align="center"><span style="font-family: Arial, serif;"><t t-esc="cant_extra_plan"/></span></p>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="5" valign="top" width="590" height="19">
+                        <p style="margin-top: 0.1cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>RELACION DE TAREAS INCUMPLIDAS, MODIFICADAS Y NUEVAS</strong></span></span></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="279">
+                        <p style="margin-top: 0.1cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>QUIEN LAS ORIGINA; (CAUSAS)</strong></span></span></span></p>
+                        </td>
+                        </tr>
+                        <tr valign="top">
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="5" width="590" height="9">
+                        <p style="margin-top: 0.1cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>MODIFICADAS</strong></span></span></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="279">
+                        <p></p>
+                        </td>
+                        </tr>
+
+                        <t t-if="len(arr_events_modified)">
+                                <tr valign="top">
+                                    <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="5" width="590" height="55">
+                                        <t t-foreach="arr_events_modified" t-as="arr">
+                                            <p style="margin-left: 0.64cm;"><t t-esc="arr['name']"/></p>
+                                        </t>
+                                    </td>
+                                    <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="279">
+                                        <t t-foreach="arr_events_modified" t-as="arr">
+                                            <p style="margin-left: 0.64cm;"><t t-esc="arr['motive']"/></p>
+                                        </t>
+                                    </td>
+                                </tr>
+                        </t>
+
+                        <tr valign="top">
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="5" width="590" height="14">
+                        <p style="margin-top: 0.12cm;"><span style="font-family: Arial, serif;"><strong>SUSPENDIDAS</strong></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="279">
+                        <p style="margin-top: 0.12cm;"></p>
+                        </td>
+                        </tr>
+                        <t t-if="len(arr_events_suspend)">
+                                <tr valign="top">
+                                    <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="5" width="590" height="55">
+                                        <t t-foreach="arr_events_suspend" t-as="arr">
+                                            <p style="margin-left: 0.64cm;"><t t-esc="arr['name']"/></p>
+                                        </t>
+                                    </td>
+                                    <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="279">
+                                        <t t-foreach="arr_events_suspend" t-as="arr">
+                                            <p style="margin-left: 0.64cm;"><t t-esc="arr['motive']"/></p>
+                                        </t>
+                                    </td>
+                                </tr>
+                        </t>     
+
+                        <tr valign="top">
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="5" width="590" height="15">
+                        <p style="margin-top: 0.12cm;"><span style="color: #000000;"><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>NUEVAS TAREAS (EXTRA PLANES)</strong></span></span></span></p>
+                        </td>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="279">
+                        <p></p>
+                        </td>
+                        </tr>
+
+                        <t t-if="len(arr_events_extra)">
+                                <tr valign="top">
+                                    <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="5" width="590" height="55">
+                                        <t t-foreach="arr_events_extra" t-as="arr">
+                                            <p style="margin-left: 0.64cm;"><t t-esc="arr['name']"/></p>
+                                        </t>
+                                    </td>
+                                    <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" width="279">
+                                        <t t-foreach="arr_events_extra" t-as="arr">
+                                            <p style="margin-left: 0.64cm;"><t t-esc="arr['motive']"/></p>
+                                        </t>
+                                    </td>
+                                </tr>
+                        </t> 
+
+                        <tr>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="6" valign="top" width="880" height="11">
+                        <p><span style="font-family: Arial, serif;"><span lang="es-ES-u-co-trad"><strong>Explicación cualitativa de los aspectos positivos y negativos del PT. </strong></span></span></p>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td style="border: 2.25pt solid #000000; padding: 0.13cm 0.25cm 0.13cm 0.25cm;" colspan="6" valign="top" width="880" height="8">
+                            <p><t t-esc="aspectos_ptm"/></p>
+                        </td>
+                        </tr>
+                        </tbody>
+                        </table>
+                </div>
+            </t>
+        </template>
+</odoo>

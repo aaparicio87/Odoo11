@@ -1,0 +1,47 @@
+<odoo>
+   <!--Form View -->
+    <record id="view_calendar_event_form_inherited_plan_mensual" model="ir.ui.view">
+      <field name="name">calendar.event.form.extended</field>
+      <field name="model">calendar.event</field>
+      <field name="inherit_id" ref="calendar.view_calendar_event_form" />
+      <field name="arch" type="xml">
+        <field name="stop_date" position="after">
+          <field name="cumplida"/>
+        </field>
+        <field name="location" position="replace">
+            <field name="location" attrs="{'readonly':[['state','in',['done']]],'required': [('principal', '=', True)] }"/>
+            <field name="principal" attrs="{'readonly': [('extra_plan', '=', True)]}"/>
+        </field>
+        <field name="principal" position="after">
+          <field name="suspendida"/>
+        </field>
+        <field name="suspendida" position="after">
+          <field name="motivo_suspendida" attrs="{'invisible': [('suspendida', '=', False)], 'required': [('suspendida', '=', True)] }"/>
+        </field>
+        <field name="name" position="replace">
+            <field name="name" required="1" placeholder="por ejemplo, Comida de trabajo" attrs="{'readonly':['|',('state','=','done'),('creada', '=', True)]}"/>
+            <field name="creada" invisible="1"/>
+        </field>
+        <field name="principal" position="after">
+            <field name="ocd" invisible="1"/>
+            <field name="cocd" invisible="1"/>
+        </field>
+        <field name="allday" position="after">
+          <field name="extra_plan"/>
+        </field>
+         <field name="extra_plan" position="after">
+          <field name="motivo_extra_plan" attrs="{'invisible': [('extra_plan', '=', False)], 'required': [('extra_plan', '=', True)]}"/>
+        </field>
+        <field name="motivo_extra_plan" position="after">
+          <field name="modificada"/>
+        </field>
+         <field name="modificada" position="after">
+          <field name="motivo_modificada" attrs="{'invisible': [('modificada', '=', False)], 'required': [('modificada', '=', True)] }"/>
+        </field>
+      </field>
+    </record>
+
+
+    <menuitem id="menu_calendar_root" parent="calendar.mail_menu_calendar" name="Plan de Trabajo" sequence="2"/>
+    <menuitem id="menu_calendar_root1" parent="calendar.mail_menu_calendar" name="OCD" sequence="2"/>
+</odoo>

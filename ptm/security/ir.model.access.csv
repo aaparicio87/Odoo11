@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cmi/ptm_cmi/ptm,cmi/ptm.cmi/ptm,model_cmi/ptm_cmi/ptm,,1,0,0,0

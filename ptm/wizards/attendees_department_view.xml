@@ -1,0 +1,32 @@
+<odoo>
+<!--Wizard View Departments-->
+    <record id="attendees_wizard_department_view" model="ir.ui.view">
+      <field name="name">Attendees Wizard Departments</field>
+      <field name="model">attendees_department.wizard</field>
+      <field name="arch" type="xml">
+        <form string="Attendees Wizard">
+          <group>
+              <group>
+                <field name="event_ids"/>
+              </group>
+              <group>
+                <field name="department_ids"/>
+              </group>
+            </group>
+            <footer>
+              <button name='set_events_to_department' string='Assign' class='btn-primary' type='object'/>
+              <button string='Cancel' class='btn-secondary' special='cancel'/>
+            </footer>
+        </form>
+      </field>
+    </record>
+
+  <record id="attendees_department_wizard_action" model="ir.actions.act_window">
+    <field name="name">Wizard Department</field>
+    <field name="res_model">attendees_department.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+
+  <menuitem id="menu_attendees_department_calendar_child" parent="menu_calendar_root" name="Assign Taks Department" action="attendees_department_wizard_action" sequence="2"/>
+</odoo>

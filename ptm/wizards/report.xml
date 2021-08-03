@@ -1,0 +1,63 @@
+<odoo>
+<!--Wizard View-->
+    <record id="report_wizard_view" model="ir.ui.view">
+      <field name="name">Report Wizard</field>
+      <field name="model">reporte.wizard</field>
+      <field name="arch" type="xml">
+        <form string="Calendar Wizard">
+          <group>
+            <group>
+              <field name="months"/>
+            </group>
+            <group>
+              <field name="years"/>
+            </group>
+          </group>
+            <footer>
+              <button name='get_report_calendar' string='Accept' class='btn-primary' type='object'/>
+              <button string='Cancel' class='btn-secondary' special='cancel'/>
+            </footer>
+        </form>
+      </field>
+    </record>
+
+    <record id="resumen_wizard_view" model="ir.ui.view">
+      <field name="name">Resumen Wizard</field>
+      <field name="model">resumen.wizard</field>
+      <field name="arch" type="xml">
+        <form string="Resumen Wizard">
+          <group>
+              <group>
+                <field name="months"/>
+              </group>
+              <group>
+                <field name="years"/>
+              </group>
+              <label for="aspectos_ptm"/>
+			      	<field name="aspectos_ptm"/>
+            </group>
+            <footer>
+              <button name='get_resumen' string='Accept' class='btn-primary' type='object'/>
+              <button string='Cancel' class='btn-secondary' special='cancel'/>
+            </footer>
+        </form>
+      </field>
+    </record>
+
+  <record id="report_wizard_action" model="ir.actions.act_window">
+    <field name="name">Asistente Modelo 3</field>
+    <field name="res_model">reporte.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+
+  <record id="resumen_wizard_action" model="ir.actions.act_window">
+    <field name="name">Asistente Resumen</field>
+    <field name="res_model">resumen.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+
+  <menuitem id="wizard_modelo3" parent="menu_calendar_root" name="Modelo 3" action="report_wizard_action" sequence="2"/>
+  <menuitem id="wizard_resumen" parent="menu_calendar_root" name="Resumen Mes" action="resumen_wizard_action" sequence="2"/>
+</odoo>

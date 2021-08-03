@@ -1,0 +1,119 @@
+<odoo>
+<!--Wizard View-->
+    <record id="attendees_ocd_wizard_view" model="ir.ui.view">
+      <field name="name">Manage OCD</field>
+      <field name="model">calendar.ocd</field>
+      <field name="arch" type="xml">
+        <form string="OCD Form">
+          <header>
+            <button name="set_events_to_ocd"
+            string="Assign" type="object" class="btn-primary" attrs="{'invisible':[('ocd_flag','>',0)]}"/>
+            </header>
+          <sheet>
+                <group>
+                      <field name="ocd_flag" invisible="1"/>
+                      <field name="name"/>
+                      <field name="acronym"/>
+                      <field name="job_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                </group>
+              <notebook>
+                <page name="page_details" string="Details of the meeting">      
+                  <group>
+                    <group >
+                      <field name="start_datetime"/>
+                      <field name="stop_datetime"/>
+                    </group>
+                    <group>
+                      <field name="location" attrs="{'required': [('principal', '=', True)] }"/>
+                      <field name="principal"/>
+                    </group>
+                  </group>
+                </page>
+                <page name="page_options" string="Options">
+                  <group>
+                    <div>
+                      <group>
+                        <field name="recurrency"/>
+                      </group>
+                      <div attrs="{'invisible': [('recurrency', '=', False)]}">
+                        <group>
+                          <label for="interval"/>
+                          <div class="o_row">
+                            <field name="interval" attrs="{'required': [('recurrency', '=', True)]}"/>
+                            <field name="rrule_type" attrs="{'required': [('recurrency', '=', True)]}"/>
+                          </div>
+                          <label string="To" for="end_type"/>
+                          <div class="o_row">
+                            <field name="end_type" attrs="{'required': [('recurrency', '=', True)]}"/>
+                            <field name="count" attrs="{'invisible': [('end_type', '!=', 'count')], 'required': [('recurrency', '=', True)]}"/>
+                            <field name="final_date" attrs="{'invisible': [('end_type', '!=', 'end_date')], 'required': [('end_type', '=', 'end_date'), ('recurrency', '=', True)]}"/>
+                          </div>
+                        </group>
+                        <group attrs="{'invisible': [('rrule_type', '!=', 'weekly')]}" name="weekdays">
+                          <field name="mo" />
+                          <field name="tu" />
+                          <field name="we" />
+                          <field name="th" />
+                          <field name="fr" />
+                          <field name="sa" />
+                          <field name="su" />
+                        </group>
+                        <group attrs="{'invisible': [('rrule_type', '!=', 'monthly')]}">
+                          <label string="Día del Mes" for="month_by"/>
+                          <div class="o_row">
+                            <field name="month_by"/>
+                            <field name="day" attrs="{'required': [('month_by', '=', 'date'), ('rrule_type', '=', 'monthly')], 'invisible': [('month_by', '!=', 'date')]}"/>
+                            <field name="byday" string="El" attrs="{'required': [('recurrency', '=', True), ('month_by', '=', 'day'), ('rrule_type', '=', 'monthly')]}"/>
+                            <field name="week_list" nolabel="1" attrs="{'required': [('recurrency', '=', True), ('month_by', '=', 'day'), ('rrule_type', '=', 'monthly')],'invisible': [('month_by', '!=', 'day')]}"/>
+                          </div>
+                        </group>
+                      </div>
+                    </div>
+                  </group>
+                </page>
+            </notebook>
+            </sheet>
+        </form>
+      </field>
+    </record>
+
+   <!--Kanban view -->
+  <record id="kanban_tasks" model="ir.ui.view">
+        <field name="name">ocd.kanban.view</field>
+        <field name="model">calendar.ocd</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="job_ids" />
+                <field name="name" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_card">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="col-xs-6 o_primary">
+                                        <h4 class="o_kanban_record_title">
+                                         <field name="name" />
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+  <record id="attendees_wizard_ocd_action" model="ir.actions.act_window">
+    <field name="name">Manage OCD</field>
+    <field name="res_model">calendar.ocd</field>
+    <field name="view_mode">form</field>
+    <field name="view_mode">kanban,form</field>
+  </record>
+
+  <!--Menus-->
+
+    <menuitem id="action_ocd_menu" name="Manage OCD" sequence="2" parent="ptm.menu_calendar_root1" action="attendees_wizard_ocd_action"/>
+
+</odoo>
